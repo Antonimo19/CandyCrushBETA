@@ -43,7 +43,7 @@ public class CandyCrush {
         if(movimientos != 0){
             ImprimeResultados(tablero);
         }
-    }
+     }
     
 }
 
@@ -69,7 +69,7 @@ class Tablero{
             /*Relleno primer caracter*/
             for(int i = 1; i<=8;i++) tablasalida[0][i] = caracter[0]; //Fila 0, car 1
             tablasalida[1][0]=tablasalida[1][4]=tablasalida[1][8]=caracter[0]; //Fila 1, car 1
-            tablasalida[2][5] = caracter[0]; //Fila 2, car 1
+            tablasalida[2][5] = caracter[0]; //Fila 2, car 1 
             for(int i=0; i<=8;i++)tablasalida[3][i]=caracter[0]; //Fila 3, car 1
             tablasalida[4][4] = tablasalida[4][7] = caracter[0]; //Fila 4, car 1
             tablasalida[5][8] = caracter[0];
@@ -114,7 +114,7 @@ class Tablero{
                 rellenoCorrecto = !(tableroJugable(tablasalida));
             }
             
-            return tablasalida;
+            return tablasalida; 
         }
     }
     
@@ -133,7 +133,7 @@ class Tablero{
         case 3:
             return caracter[3];
         case 4:
-            return caracter[4];
+            return caracter[4]; 
         }
         
     return '\u0000';
