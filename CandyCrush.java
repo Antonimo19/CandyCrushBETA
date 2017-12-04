@@ -16,7 +16,7 @@ public class CandyCrush {
         
         Tablero tablero = new Tablero(seleccion);
         
-        while(movimientos<=10 && seleccion != 0){
+        while(movimientos<10 && seleccion != 0){
         	
             System.out.println("Introduzca las coordenadas de dos celdas contiguas");
             
