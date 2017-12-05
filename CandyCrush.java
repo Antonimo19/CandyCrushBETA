@@ -140,14 +140,14 @@ class Tablero{
     
     }
     
- public static void ImprimirTablero(Tablero e){ //Hay que cambiar leyenda
+ public static void ImprimirTablero(Tablero e){ 
         for(int i = 0; i<=9;i++){
             for(int j = 0; j<=9;j++){
                 if(i == 0 && j == 0){
                     System.out.print("\t");
                 }
                 else if(i == 0 && j>0) {
-                    System.out.print(j-1+"\t");    //Imprime leyenda columnas
+                    System.out.print(j+"\t");    //Imprime leyenda columnas
                 }
                 else if(j == 0 && i>0){
                     System.out.print(i-1+"\t"); //Imprime leyenda filas
