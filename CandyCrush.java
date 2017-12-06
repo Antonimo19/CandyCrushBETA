@@ -15,9 +15,13 @@ public class CandyCrush {
         int movimientos = 0;
         
         Tablero tablero = new Tablero(seleccion);
+        char[][]tablaanterior = tablero.tabla;
         
         while(movimientos<10 && seleccion != 0){
         	
+        	if(tableroJugable(tablero.tabla)==false){
+        		hacerJugable(tablero);
+        	}
             System.out.println("Introduzca las coordenadas de dos celdas contiguas");
             
             //Falta validar
@@ -34,8 +38,10 @@ public class CandyCrush {
             c2 = in.nextInt();
             
             Jugada(tablero,f1,c1,f2,c2);
-            
-            movimientos++;
+            if(tablaanterior !=tablero.tabla){
+            	movimientos++;
+            }
+            tablaanterior = tablero.tabla;            
         }
         
         System.out.println("Fin del juego \n");
@@ -44,6 +50,34 @@ public class CandyCrush {
             ImprimeResultados(tablero);
         }
      }
+    public static boolean tableroJugable(char[][]entrada){ //Duda Maria Luisa
+    	for(int j = 0; j<9; j++){	//Jugadas todas las columnas caramelos verticales
+    		for(int i = 0; i<6;i++){
+    			if((entrada[i][j] == entrada[i+1][j] && entrada[i][j] == entrada[i+3][j]) || (entrada[i][j] == entrada[i+2][j] && entrada[i][j] == entrada[i+3][j])){
+    				return true;
+    			}
+    		}
+    	}
+    	for(int i = 0; i<7; i++){ //Jugadas columna 0
+    		if((entrada[i][0] == entrada[i+1][0] && entrada[i][0] == entrada[i+2][1])||(entrada[i][0] == entrada[i+2][0] && entrada[i][0] == entrada[i+1][1])||(entrada[i][1] == entrada[i+1][0] && entrada[i+1][0] == entrada[i+2][0])){
+    			return true;
+    		}
+    	}
+    	for(int i = 0; i<7; i++){ //Jugadas columna 8
+    		if((entrada[i][8] == entrada[i+1][8] && entrada[i][8] == entrada[i+2][7])||(entrada[i][8] == entrada[i+2][8] && entrada[i][8] == entrada[i+1][7])||(entrada[i][7] == entrada[i+1][8] && entrada[i+1][8] == entrada[i+2][8])){
+    			return true;
+    		}
+    	}
+    	for(int j=1; j<8;j++){	//Jugadas todas las columnas caramelos en l en seis posibilidades
+    		for(int i=0; i<7; i++){
+    			if((entrada[i][j] == entrada[i+1][j] && (entrada[i][j] == entrada[i+2][j+1]||entrada[i][j]== entrada[i+2][j-1]))||((entrada[i][j] == entrada[i+1][j+1]&&entrada[i][j]==entrada[i+2][j+1])||entrada[i][j]==entrada[i-1][j-1]&&entrada[i][j]==entrada[i-2][j-1])||(entrada[i][j]==entrada[i+2][j]&&(entrada[i][j]==entrada[i+1][j+1]||entrada[i][j]==entrada[i+1][j-1]))){
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    	
+    }
     
 }
 
@@ -57,7 +91,7 @@ class Tablero{
     //Parametros del tablero
     public Tablero(int n){
         this.dificultad = n;
-        this.tabla=rellenarAleatorio(dificultad);
+        this.tabla=rellenarAletorio(dificultad);
         this.puntuacion = 0;
     }
     
@@ -162,16 +196,31 @@ class Tablero{
         }
     }
     public static boolean tableroJugable(char[][]entrada){
+    	for(int j = 0; j<9; j++){	//Jugadas todas las columnas caramelos verticales
+    		for(int i = 0; i<6;i++){
+    			if((entrada[i][j] == entrada[i+1][j] && entrada[i][j] == entrada[i+3][j]) || (entrada[i][j] == entrada[i+2][j] && entrada[i][j] == entrada[i+3][j])){
+    				return true;
+    			}
+    		}
+    	}
+    	for(int i = 0; i<7; i++){ //Jugadas columna 0
+    		if((entrada[i][0] == entrada[i+1][0] && entrada[i][0] == entrada[i+2][1])||(entrada[i][0] == entrada[i+2][0] && entrada[i][0] == entrada[i+1][1])||(entrada[i][1] == entrada[i+1][0] && entrada[i+1][0] == entrada[i+2][0])){
+    			return true;
+    		}
+    	}
+    	for(int i = 0; i<7; i++){ //Jugadas columna 8
+    		if((entrada[i][8] == entrada[i+1][8] && entrada[i][8] == entrada[i+2][7])||(entrada[i][8] == entrada[i+2][8] && entrada[i][8] == entrada[i+1][7])||(entrada[i][7] == entrada[i+1][8] && entrada[i+1][8] == entrada[i+2][8])){
+    			return true;
+    		}
+    	}
+    	for(int j=1; j<8;j++){	//Jugadas todas las columnas caramelos en l en seis posibilidades
+    		for(int i=0; i<7; i++){
+    			if((entrada[i][j] == entrada[i+1][j] && (entrada[i][j] == entrada[i+2][j+1]||entrada[i][j]== entrada[i+2][j-1]))||((entrada[i][j] == entrada[i+1][j+1]&&entrada[i][j]==entrada[i+2][j+1])||entrada[i][j]==entrada[i-1][j-1]&&entrada[i][j]==entrada[i-2][j-1])||(entrada[i][j]==entrada[i+2][j]&&(entrada[i][j]==entrada[i+1][j+1]||entrada[i][j]==entrada[i+1][j-1]))){
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
     	
-        char anterior2 = entrada[0][0], anterior1 = entrada[1][0];
-        
-        for(int i=0;i<=8;i++){
-            for(int j=2;j<=7;j++){
-                if((i==0)&&(anterior2==anterior1)&&(entrada[j+1][i+1] == anterior1)){  //Primera columna
-                	
-                    return true;
-                } 
-            }
-        }
     }
 }
