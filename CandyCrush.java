@@ -13,41 +13,44 @@ public class CandyCrush {
         int seleccion = in.nextInt(); //Hay que validar
         int f1,c1,f2,c2;
         int movimientos = 0;
+    	char[][]tablaanterior = new char[9][9];
+    	if(seleccion != 0){
+    		Tablero tablero = new Tablero(seleccion);
+    		//actualizarTablero(tablero);
+    		tablero.puntuacion = 0;
+  
         
-        Tablero tablero = new Tablero(seleccion);
-        actualizarTablero(tablero);
-        tablero.puntuacion = 0;
-        char[][]tablaanterior = tablero.tabla;
-        
-        while(movimientos<10 && seleccion != 0){
-        	
-            System.out.println("Introduzca las coordenadas de dos celdas contiguas");
+    		while(movimientos<10 && seleccion != 0){
+    			ImprimirTablero(tablero);
+    			tablaanterior = copiaTabla(tablero.tabla, tablaanterior);
+    			System.out.println("Introduzca las coordenadas de dos celdas contiguas");
+    			
+    			
+    		//Falta validar
+    			System.out.print("Fila de la primera casilla");
+    			f1 = 9-in.nextInt();
             
-            //Falta validar
-            System.out.print("Fila de la primera casilla");
-            f1 = in.nextInt();
+    			System.out.print("Columna de la primera casilla");
+    			c1 = in.nextInt()-1;
             
-            System.out.print("Columna de la primera casilla");
-            c1 = in.nextInt();
+    			System.out.print("Fila de la segunda casilla");
+    			f2 = 9-in.nextInt();
             
-            System.out.print("Fila de la segunda casilla");
-            f2 = in.nextInt();
+    			System.out.print("Columna de la segunda casilla");
+    			c2 = in.nextInt()-1;
             
-            System.out.print("Columna de la segunda casilla");
-            c2 = in.nextInt();
-            
-            Jugada(tablero,f1,c1,f2,c2);
-            if(tablaanterior !=tablero.tabla){
-            	movimientos++;
-            }
-            tablaanterior = tablero.tabla;            
-        }
-        
+    			Jugada(tablero,f1,c1,f2,c2);
+    			if(tablasIguales(tablero.tabla, tablaanterior) == false){
+    				movimientos++;
+    			}
+    			tablaanterior = copiaTabla(tablero.tabla, tablaanterior);
+    		}	
+    		ImprimeResultados(tablero);
+    
+    	} 
         System.out.println("Fin del juego \n");
         
-        if(movimientos != 0){
-            ImprimeResultados(tablero);
-        }
+        
      }
     public static boolean tableroJugable(char[][]entrada){ //Duda Maria Luisa
     	for(int j = 0; j<9; j++){	//Jugadas todas las columnas caramelos verticales
@@ -77,82 +80,163 @@ public class CandyCrush {
     	return false;
     	
     }
-    public static void eliminarBolas(Tablero t){
 
-    /*Elimina las bolas contiguas iguales del tablero, aumenta la puntuacion en lo que las corresponda y las sustituye
-     *por el caracter 'r'*/
-    	for(int j = 0; j<9; j++){
-    		for(int i = 0; i<7; i++){
-    			if(t.tabla[i][j] == t.tabla[i+1][j] && t.tabla[i][j]==t.tabla[i+2][j]){
-    				if(i<=5&&(t.tabla[i][j]==t.tabla[i+3][j])){
-    					if(i<=4&&(t.tabla[i][j]==t.tabla[i+4][j])){
-    						if(i<=3&&(t.tabla[i][j] == t.tabla[i+5][j])){
-    							if(i<=2&&(t.tabla[i][j]==t.tabla[i+6][j])){	//7 bolas
-    								t.puntuacion += 50;
-    								t.tabla[i+6][j] = t.tabla[i+5][j] = t.tabla[i+4][j]= t.tabla[i+3][j] = t.tabla[i+2][j] = t.tabla[i+1][j] = t.tabla[i][j] = 'r';
-    							}
-    							else{	//6 bolas
-    								t.puntuacion += 40;
-    								t.tabla[i+5][j] = t.tabla[i+4][j]= t.tabla[i+3][j] = t.tabla[i+2][j] = t.tabla[i+1][j] = t.tabla[i][j] = 'r';
+   public static boolean tablasIguales(char[][]A, char[][]B){
+	   int filA = A.length;
+	   int colA = A[0].length;
+	   int filB = B.length;
+	   int colB = B[0].length;
+	
+	   if(filA != filB || colA!=colB)return false;
+	   for(int i=0; i<filA; i++){
+		   for(int j=0; j<colB; j++){
+			   if(A[i][j] != B[i][j]){
+				   return false;
+			   }
+		   }
+	   }
+	   return true;
+   }
+   public static void eliminarBolas(Tablero t){
 
-    							}
-    						}
-    						else{	//5 bolas
-    							t.puntuacion+= 30;
+   /*Elimina las bolas contiguas iguales del tablero, aumenta la puntuacion en lo que las corresponda y las sustituye
+    *por el caracter 'r'*/
+   	for(int j = 0; j<9; j++){
+   		for(int i = 0; i<7; i++){
+   			if(t.tabla[i][j] == t.tabla[i+1][j] && t.tabla[i][j]==t.tabla[i+2][j]){
+   				if(i<=5&&(t.tabla[i][j]==t.tabla[i+3][j])){
+   					if(i<=4&&(t.tabla[i][j]==t.tabla[i+4][j])){
+   						if(i<=3&&(t.tabla[i][j] == t.tabla[i+5][j])){
+   							if(i<=2&&(t.tabla[i][j]==t.tabla[i+6][j])){	//7 bolas
+   								t.puntuacion += 50;
+   								t.tabla[i+6][j] = t.tabla[i+5][j] = t.tabla[i+4][j]= t.tabla[i+3][j] = t.tabla[i+2][j] = t.tabla[i+1][j] = t.tabla[i][j] = 'r';
+   							}
+   							else{	//6 bolas
+   								t.puntuacion += 40;
+   								t.tabla[i+5][j] = t.tabla[i+4][j]= t.tabla[i+3][j] = t.tabla[i+2][j] = t.tabla[i+1][j] = t.tabla[i][j] = 'r';
+
+   							}
+   						}
+   						else{	//5 bolas
+   							t.puntuacion+= 30;
 								t.tabla[i+4][j]= t.tabla[i+3][j] = t.tabla[i+2][j] = t.tabla[i+1][j] = t.tabla[i][j] = 'r';
 
-    						}
-    					}
-    					else{	//4 bolas
-    						t.puntuacion += 20;
+   						}
+   					}
+   					else{	//4 bolas
+   						t.puntuacion += 20;
 							t.tabla[i+3][j] = t.tabla[i+2][j] = t.tabla[i+1][j] = t.tabla[i][j] = 'r';
 
-    					}
-    				}
-    				
-    				else{	//3 bolas	
-    					t.puntuacion += 10;
+   					}
+   				}
+   				
+   				else{	//3 bolas	
+   					t.puntuacion += 10;
 						t.tabla[i+2][j] = t.tabla[i+1][j] = t.tabla[i][j] = 'r';
 
-    				}
-    			}
-    		}
-    	}
-    }
-    public static void actualizarTablero(Tablero t){
-    	char[][]tablaanterior;
-    	do{
-			tablaanterior = t.tabla;
+   				}
+   			}
+   		}
+   	}
+   }
+   public static void actualizarTablero(Tablero t){
+   	char[][]tablaanterior = new char[t.tabla.length][t.tabla[0].length];
+   	do{
+           tablaanterior = copiaTabla(t.tabla, tablaanterior);
 			eliminarBolas(t);
 			bajarBolas(t);
-		} while(t.tabla !=tablaanterior);
-    }
-    public static void bajarBolas(Tablero t){
-    	char temp;
-    	for(int j = 0; j<9;j++){
-    		for(int i = 0; i<9; i++){
-    			if(i)
-    		}
-    				
-    	}
-    }
-    public static void Jugada(Tablero t, int f1, int c1, int f2, int c2){
-    //Realiza la jugada
-    	char temp;
-    	char[][]tablaanterior;
-    	if(f1 == f2 ^ c1 == c2){
-    		tablaanterior = t.tabla;
-    		temp = t.tabla[f1][c1];
-    		t.tabla[f1][c1] = t.tabla[f2][c2];
-    		t.tabla[f2][c2] = temp;
-    		actualizarTablero(t);
-    		if(tablaanterior == t.tabla){
-    			System.out.println("Jugada sin cambios");
-    		}   		
-    	}
-    	else{
-    		System.out.println("Jugada no valida");
-    	}
+		} while(tablasIguales(t.tabla,tablaanterior) == false);
+   }
+   public static void bajarBolas(Tablero t){
+   	int numBolas = 0, posInicio = 0, posFin;
+   	for(int j = 0; j<9;j++){		//Obtiene el numero de bolas a eliminar, su posicion de inicio  y la del final
+   		for(int i = 0; i<9; i++){
+   			if(t.tabla[i][j] == 'r'){
+   				numBolas++;
+   				if(numBolas == 1){
+   					posInicio = i;
+   				}
+   			}    			
+   		}	
+   	}
+		posFin = numBolas + posInicio-1;
+		
+		for(int j = 0; j<9;j++){
+			for(int i = posFin; i>=posInicio; i--){
+				if(i-numBolas>=0){
+					t.tabla[i][j] = t.tabla[i-numBolas][j];
+					t.tabla[i-numBolas][j] = caracterAleatorio(t.dificultad);
+
+				}
+				else{
+					t.tabla[i][j] = caracterAleatorio(t.dificultad);
+				}
+			}
+		}
+		
+		
+
+   }
+   public static void Jugada(Tablero t, int f1, int c1, int f2, int c2){
+   //Realiza la jugada
+   	char temp;
+   	char[][]tablaanterior;
+   	if(f1 == f2 ^ c1 == c2){
+   		tablaanterior = t.tabla;
+   		temp = t.tabla[f1][c1];
+   		t.tabla[f1][c1] = t.tabla[f2][c2];
+   		t.tabla[f2][c2] = temp;
+   		actualizarTablero(t);
+   		if(tablasIguales(tablaanterior,t.tabla)){
+   			System.out.println("Jugada sin cambios");
+   		}   		
+   	}
+   	else{
+   		System.out.println("Jugada no valida");
+   	}
+  }
+   public static char[][] copiaTabla(char[][]A, char[][]B){
+   //Copia la tabla A en la tabla B
+   //PRE: Las tablas tienen las mismas dimensiones
+	   int filas = A.length;
+	   int columnas = A[0].length;
+	   for(int i=0; i<filas; i++){
+		   for(int j=0;j<columnas; j++){
+			   B[i][j] = A[i][j];
+		   }
+	   }
+	   return B;
+   }
+   public static char caracterAleatorio(int n){
+       //Devuelve un caracter aleatorio dependiendo del modo de dificultad del juego n
+   	
+       int aleatorio = (int)(Math.random()*(n+2));
+       return Tablero.caracter[aleatorio];
+   
+   }
+   public static void ImprimeResultados(Tablero t){
+	   System.out.println("Puntuacion: " + t.puntuacion);
+   }
+   public static void ImprimirTablero(Tablero e){ 
+       for(int i = 0; i<=9;i++){
+           for(int j = 0; j<=9;j++){
+               if(i == 0 && j == 0){
+                   System.out.print("  ");
+               }
+               else if(i == 0 && j>0) {
+                   System.out.print(j+" ");    //Imprime leyenda columnas
+               }
+               else if(j == 0 && i>0){
+                   System.out.print((10-i)+" "); //Imprime leyenda filas
+               }
+               else{
+                   System.out.print(e.tabla[i-1][j-1]+" "); //Imprime elemento
+               }
+               if(j == 9){
+                   System.out.println("");
+               }
+           }
+       }
    }
 }
 
@@ -230,46 +314,12 @@ class Tablero{
     public static char caracterAleatorio(int n){
         //Devuelve un caracter aleatorio dependiendo del modo de dificultad del juego n
     	
-        int aleatorio = (int)Math.random()*(n+2);
-        
-        switch(aleatorio){
-        case 0:
-            return caracter[0];
-        case 1:
-            return caracter[1];
-        case 2:
-            return caracter[2];
-        case 3:
-            return caracter[3];
-        case 4:
-            return caracter[4]; 
-        }
-        
-    return '\u0000';
+        int aleatorio = (int)(Math.random()*(n+2));
+        return caracter[aleatorio];
     
     }
     
-    public static void ImprimirTablero(Tablero e){ 
-        for(int i = 0; i<=9;i++){
-            for(int j = 0; j<=9;j++){
-                if(i == 0 && j == 0){
-                    System.out.print("\t");
-                }
-                else if(i == 0 && j>0) {
-                    System.out.print(j+"\t");    //Imprime leyenda columnas
-                }
-                else if(j == 0 && i>0){
-                    System.out.print(i-1+"\t"); //Imprime leyenda filas
-                }
-                else{
-                    System.out.print(e.tabla[i-1][j-1]+"\t"); //Imprime elemento
-                }
-                if(j == 9){
-                    System.out.println("");
-                }
-            }
-        }
-    }
+
     public static boolean tableroJugable(char[][]entrada){
     	for(int j = 0; j<9; j++){	//Jugadas todas las columnas caramelos verticales
     		for(int i = 0; i<6;i++){
