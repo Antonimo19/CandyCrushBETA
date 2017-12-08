@@ -2,7 +2,7 @@
 import java.util.Scanner;
 
 public class CandyCrush {
-   
+    public static final char caracter[] = {'@','#','%','&','='};
     public static void main(String[] args) {
     	
         Scanner in = new Scanner(System.in);
@@ -16,11 +16,11 @@ public class CandyCrush {
     	char[][]tablaanterior = new char[9][9];
     	if(seleccion != 0){
     		Tablero tablero = new Tablero(seleccion);
-    		//actualizarTablero(tablero);
+    		actualizarTablero(tablero);
     		tablero.puntuacion = 0;
   
         
-    		while(movimientos<10 && seleccion != 0){
+    		while(movimientos<10){
     			ImprimirTablero(tablero);
     			tablaanterior = copiaTabla(tablero.tabla, tablaanterior);
     			System.out.println("Introduzca las coordenadas de dos celdas contiguas");
@@ -38,12 +38,13 @@ public class CandyCrush {
             
     			System.out.print("Columna de la segunda casilla");
     			c2 = in.nextInt()-1;
-            
+    			System.out.println("");
+  
     			Jugada(tablero,f1,c1,f2,c2);
     			if(tablasIguales(tablero.tabla, tablaanterior) == false){
     				movimientos++;
     			}
-    			tablaanterior = copiaTabla(tablero.tabla, tablaanterior);
+    			System.out.println("Movimientos restantes: "+(10-movimientos)+"\t Puntuacion: "+tablero.puntuacion+"\n");
     		}	
     		ImprimeResultados(tablero);
     
@@ -52,6 +53,7 @@ public class CandyCrush {
         
         
      }
+ 
     public static boolean tableroJugable(char[][]entrada){ //Duda Maria Luisa
     	for(int j = 0; j<9; j++){	//Jugadas todas las columnas caramelos verticales
     		for(int i = 0; i<6;i++){
@@ -140,49 +142,58 @@ public class CandyCrush {
    	}
    }
    public static void actualizarTablero(Tablero t){
-   	char[][]tablaanterior = new char[t.tabla.length][t.tabla[0].length];
+   	char[][]tablaanterior = new char[9][9];
    	do{
            tablaanterior = copiaTabla(t.tabla, tablaanterior);
 			eliminarBolas(t);
 			bajarBolas(t);
 		} while(tablasIguales(t.tabla,tablaanterior) == false);
+   	if(tableroJugable(t.tabla) == false){
+   		//removerTablero(t);
+   	}
+   	
    }
    public static void bajarBolas(Tablero t){
-   	int numBolas = 0, posInicio = 0, posFin;
-   	for(int j = 0; j<9;j++){		//Obtiene el numero de bolas a eliminar, su posicion de inicio  y la del final
-   		for(int i = 0; i<9; i++){
-   			if(t.tabla[i][j] == 'r'){
-   				numBolas++;
-   				if(numBolas == 1){
-   					posInicio = i;
-   				}
-   			}    			
-   		}	
-   	}
-		posFin = numBolas + posInicio-1;
-		
-		for(int j = 0; j<9;j++){
-			for(int i = posFin; i>=posInicio; i--){
-				if(i-numBolas>=0){
-					t.tabla[i][j] = t.tabla[i-numBolas][j];
-					t.tabla[i-numBolas][j] = caracterAleatorio(t.dificultad);
-
-				}
-				else{
-					t.tabla[i][j] = caracterAleatorio(t.dificultad);
-				}
-			}
-		}
-		
-		
-
+	   int posFinal=8, i = 8, j= 8;
+	   
+	   do{
+		   for(i = 8; i>=0;i--){
+			   for(j =8; j>=0; j--){
+				   if(t.tabla[i][j] == 'r'){
+					   for(int x = i; x>=0;x--){		//Cuentas numero de r en columna j
+						   if(t.tabla[x][j] == 'r'){
+							   posFinal = x;
+						   }
+					   }
+					   if(posFinal-1>=0){
+						   t.tabla[i][j] = t.tabla[posFinal-1][j];
+						   t.tabla[posFinal-1][j] = 'r';
+					   }
+				   }
+			   
+			   }
+	   	   }
+	   }while(posFinal != 0 && i == 0 && j == 0);
+	   for(int f = 0; f<9;f++){
+		   for(int c = 0; c<9;c++){
+			   if(t.tabla[f][c] == 'r'){
+				   t.tabla[f][c] = caracterAleatorio(t.dificultad);
+			   }
+		   }
+		   
+	   }
+   
+   
    }
+		
+
+   
    public static void Jugada(Tablero t, int f1, int c1, int f2, int c2){
    //Realiza la jugada
    	char temp;
-   	char[][]tablaanterior;
-   	if(f1 == f2 ^ c1 == c2){
-   		tablaanterior = t.tabla;
+   	char[][]tablaanterior = new char[9][9];
+   	if((f1 == f2 ^ c1 == c2) && ((int)Math.abs(f1-f2) == 1) ^((int)Math.abs(c1-c2) == 1)){
+   		tablaanterior = copiaTabla(t.tabla, tablaanterior);
    		temp = t.tabla[f1][c1];
    		t.tabla[f1][c1] = t.tabla[f2][c2];
    		t.tabla[f2][c2] = temp;
@@ -209,9 +220,11 @@ public class CandyCrush {
    }
    public static char caracterAleatorio(int n){
        //Devuelve un caracter aleatorio dependiendo del modo de dificultad del juego n
-   	
+	   if(n==4){
+   		n=1;
+   		}
        int aleatorio = (int)(Math.random()*(n+2));
-       return Tablero.caracter[aleatorio];
+       return caracter[aleatorio];
    
    }
    public static void ImprimeResultados(Tablero t){
@@ -260,7 +273,7 @@ class Tablero{
         
         if(n == 4){ //Relleno tabla fija
             /*Relleno primer caracter*/
-            for(int i = 1; i<=8;i++) tablasalida[0][i] = caracter[0]; //Fila 0, car 1
+        	for(int i = 1; i<=8;i++) tablasalida[0][i] = caracter[0]; //Fila 0, car 1
             tablasalida[1][0]=tablasalida[1][4]=tablasalida[1][8]=caracter[0]; //Fila 1, car 1
             tablasalida[2][5] = caracter[0]; //Fila 2, car 1 
             for(int i=0; i<=8;i++)tablasalida[3][i]=caracter[0]; //Fila 3, car 1
@@ -313,7 +326,9 @@ class Tablero{
     
     public static char caracterAleatorio(int n){
         //Devuelve un caracter aleatorio dependiendo del modo de dificultad del juego n
-    	
+    	if(n==4){
+    		n=1;
+    	}
         int aleatorio = (int)(Math.random()*(n+2));
         return caracter[aleatorio];
     
