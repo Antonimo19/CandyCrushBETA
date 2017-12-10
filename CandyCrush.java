@@ -178,7 +178,7 @@ public class CandyCrush {
 					t = temp;
 				}
 					
-			}while(!tableroJugable(temp.tabla));
+			}while(!tableroJugable(t.tabla));
 			
 		}while(!tablasIguales(t.tabla,tablaanterior));
 	   	
