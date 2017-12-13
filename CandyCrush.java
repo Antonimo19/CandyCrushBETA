@@ -24,7 +24,15 @@ public class CandyCrush {
     			if(Tablero.tableroJugable(tablero.tabla)==false){
     				//Si se llega a un tablero sin jugadas disponibles
     				System.out.println("El tablero no era jugable. Tu nuevo tablero:");
-    				tablero = new Tablero(tablero.dificultad,tablero.puntuacion);
+    				if(tablero.dificultad == 4){
+    					tablero = new Tablero(1,tablero.puntuacion);
+
+    				}
+    				else{
+    					tablero = new Tablero(tablero.dificultad,tablero.puntuacion);
+
+    				}
+    				
     			}
     			
     			ImprimirTablero(tablero);
