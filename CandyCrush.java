@@ -15,7 +15,7 @@ public class CandyCrush {
         	seleccion = in.nextInt();
         }while(seleccion<0 ||seleccion>4);
         
-        int f1 = 1,c1 = 1,f2 = 1,c2 = 1;
+        int f1,c1,f2,c2;
         int movimientos = 0;
     	char[][]tablaanterior = new char[9][9];
     	
@@ -24,7 +24,7 @@ public class CandyCrush {
     		actualizarTablero(tablero);
     		tablero.puntuacion = 0;
     		
-    		while(movimientos<10 && (f1 != 9 && c1 != 0 && f2 != 9 && c2 != 0)){
+    		while(movimientos<10){
     			if(Tablero.tableroJugable(tablero.tabla)==false){
     				//Si se llega a un tablero sin jugadas disponibles
     				System.out.println("El tablero no era jugable. Tu nuevo tablero:");
@@ -56,13 +56,21 @@ public class CandyCrush {
     				c2 = in.nextInt()-1;
     				System.out.println("");
     				
+    				if(f1 == 9 && f2 == 9 && c1 == -1 && c2 == -1){
+    	    	   		System.out.println("Has abandonado el juego");
+    	    	   		movimientos = 1000;
+    	    	   		
+    	    	   	}
     			/*Realizacion de la jugada*/
-    			Jugada(tablero,f1,c1,f2,c2);
-    			if(tablasIguales(tablero.tabla, tablaanterior) == false){
-    				//En el caso de que la jugada haya tenido efecto sobre el tablero
-    				movimientos++;
+    			if(movimientos<10){
+    				Jugada(tablero,f1,c1,f2,c2,movimientos);
+    				if(tablasIguales(tablero.tabla, tablaanterior) == false){
+    					//En el caso de que la jugada haya tenido efecto sobre el tablero
+    					movimientos++;
+    				}
+    				System.out.println("\n\nMovimientos restantes: "+(10-movimientos)+"\t Puntuacion: "+tablero.puntuacion+"\n");
     			}
-    			System.out.println("\n\nMovimientos restantes: "+(10-movimientos)+"\t Puntuacion: "+tablero.puntuacion+"\n");
+    			
     		}	
     		ImprimeResultados(tablero);
     
@@ -88,7 +96,7 @@ public class CandyCrush {
  	   }
  	   return true;
     }
-    public static void Jugada(Tablero t, int f1, int c1, int f2, int c2){
+    public static void Jugada(Tablero t, int f1, int c1, int f2, int c2, int mov){
     	   //Realiza la jugada
     	   	char temp;
     	   	char[][]tablaanterior = new char[9][9];
@@ -106,9 +114,6 @@ public class CandyCrush {
     	   	   		t.tabla[f1][c1] = t.tabla[f2][c2];
     	   	   		t.tabla[f2][c2] = temp;
     	   		}
-    	   		
-    	   	}else if(f1 == 9 && f2 == 9 && c1 == -1 && c2 == -1){
-    	   		System.out.println("Has abandonado el juego");
     	   		
     	   	}else{
     	   		System.out.println("Jugada no valida");
