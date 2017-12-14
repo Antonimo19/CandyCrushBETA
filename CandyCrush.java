@@ -2,37 +2,39 @@
 import java.util.Scanner;
 
 public class CandyCrush {
+	
     public static void main(String[] args) {
     	
         Scanner in = new Scanner(System.in);
         int seleccion;
+        
         do{
         	System.out.println("Elija el tipo de tablero: \n 1. Facil \n 2. Intermedio" +
         			"\n 3. Dificil \n 4. Tablero fijo \n 0. Salir");
         
         	seleccion = in.nextInt();
         }while(seleccion<0 ||seleccion>4);
-        int f1,c1,f2,c2;
+        
+        int f1 = 1,c1 = 1,f2 = 1,c2 = 1;
         int movimientos = 0;
     	char[][]tablaanterior = new char[9][9];
+    	
     	if(seleccion != 0){
     		Tablero tablero = new Tablero(seleccion);
     		actualizarTablero(tablero);
     		tablero.puntuacion = 0;
     		
-    		while(movimientos<10){
+    		while(movimientos<10 && (f1 != 9 && c1 != 0 && f2 != 9 && c2 != 0)){
     			if(Tablero.tableroJugable(tablero.tabla)==false){
     				//Si se llega a un tablero sin jugadas disponibles
     				System.out.println("El tablero no era jugable. Tu nuevo tablero:");
     				if(tablero.dificultad == 4){
     					tablero = new Tablero(1,tablero.puntuacion);
-
-    				}
-    				else{
+    					
+    				}else{
     					tablero = new Tablero(tablero.dificultad,tablero.puntuacion);
-
-    				}
-    				
+    					
+    				}			
     			}
     			
     			ImprimirTablero(tablero);
@@ -53,6 +55,7 @@ public class CandyCrush {
     				System.out.print("Columna de la segunda casilla");
     				c2 = in.nextInt()-1;
     				System.out.println("");
+    				
     			/*Realizacion de la jugada*/
     			Jugada(tablero,f1,c1,f2,c2);
     			if(tablasIguales(tablero.tabla, tablaanterior) == false){
@@ -68,6 +71,7 @@ public class CandyCrush {
         in.close();
         
      }
+    
     public static boolean tablasIguales(char[][]A, char[][]B){
  	   int filA = A.length;
  	   int colA = A[0].length;
@@ -103,8 +107,10 @@ public class CandyCrush {
     	   	   		t.tabla[f2][c2] = temp;
     	   		}
     	   		
-    	   	}
-    	   	else{
+    	   	}else if(f1 == 9 && f2 == 9 && c1 == -1 && c2 == -1){
+    	   		System.out.println("Has abandonado el juego");
+    	   		
+    	   	}else{
     	   		System.out.println("Jugada no valida");
     	   		
     	   	}
@@ -254,6 +260,7 @@ class Tablero{
         this.tabla=rellenarAletorio(dificultad);
         this.puntuacion = punt;
     }
+    
     public static char[][] rellenarAletorio(int n){
     	
         char[][]tablasalida = new char[9][9];
@@ -312,9 +319,10 @@ class Tablero{
     }
     
     public static char caracterAleatorio(int n){
-        //Devuelve un caracter aleatorio dependiendo del modo de dificultad del juego n
     	if(n==4){
     		n=1;
+    		
+    		//Devuelve un caracter aleatorio dependiendo del modo de dificultad del juego n
     	}
         int aleatorio = (int)(Math.random()*(n+2));
         return caracter[aleatorio];
@@ -323,6 +331,7 @@ class Tablero{
     
 
     public static boolean tableroJugable(char[][]entrada){
+    	
     	for(int j = 0; j<9; j++){	//Jugadas todas las columnas caramelos verticales
     		for(int i = 0; i<6;i++){
     			if((entrada[i][j] == entrada[i+1][j] && entrada[i][j] == entrada[i+3][j]) || (entrada[i][j] == entrada[i+2][j] && entrada[i][j] == entrada[i+3][j])){
