@@ -63,7 +63,7 @@ public class CandyCrush {
     	    	   	}
     			/*Realizacion de la jugada*/
     			if(movimientos<10){
-    				Jugada(tablero,f1,c1,f2,c2,movimientos);
+    				Jugada(tablero,f1,c1,f2,c2);
     				if(tablasIguales(tablero.tabla, tablaanterior) == false){
     					//En el caso de que la jugada haya tenido efecto sobre el tablero
     					movimientos++;
@@ -96,7 +96,7 @@ public class CandyCrush {
  	   }
  	   return true;
     }
-    public static void Jugada(Tablero t, int f1, int c1, int f2, int c2, int mov){
+    public static void Jugada(Tablero t, int f1, int c1, int f2, int c2){
     	   //Realiza la jugada
     	   	char temp;
     	   	char[][]tablaanterior = new char[9][9];
