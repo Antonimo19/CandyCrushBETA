@@ -1,3 +1,4 @@
+//Antonio Sanjuan de la Mano y Mario Villacorta García
 
 import java.util.Scanner;
 
