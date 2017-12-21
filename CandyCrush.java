@@ -8,7 +8,7 @@ public class CandyCrush {
     	
         Scanner in = new Scanner(System.in);
         int seleccion;
-        
+     do{   
         do{
         	System.out.println("Elija el tipo de tablero: \n 1. Facil \n 2. Intermedio" +
         			"\n 3. Dificil \n 4. Tablero fijo \n 0. Salir");
@@ -75,7 +75,8 @@ public class CandyCrush {
     		}	
     		ImprimeResultados(tablero);
     
-    	} 
+    	}
+ 	}while(seleccion != 0);		
         System.out.println("Fin del juego \n");
         in.close();
         
